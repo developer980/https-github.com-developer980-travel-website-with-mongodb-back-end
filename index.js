@@ -16,7 +16,7 @@ const path = require("path")
 const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
 app.use(cors())
-const connectionURl = MONGODB_URI;
+const connectionURl = process.env.MONGODB_URI;
 const database = "travelMDB"
 
 require('dotenv').config();
