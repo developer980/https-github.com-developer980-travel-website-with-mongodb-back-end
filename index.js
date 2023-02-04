@@ -28,6 +28,7 @@ let elements2 = []
 
 console.log(process.env.EML)
 console.log(process.env.PASS)
+console.log("URI: " + process.env.MONGODB_URI)
 
 mongoClient.connect(
     connectionURl,
