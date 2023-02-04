@@ -16,7 +16,7 @@ const path = require("path")
 const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
 app.use(cors())
-const connectionURl = 'mongodb://127.0.0.1:27017';
+const connectionURl = MONGODB_URI;
 const database = "travelMDB"
 
 require('dotenv').config();
@@ -423,7 +423,7 @@ app.post("/get_posts", (req, res) => {
     })
 })
 
-process.env.PORT && app.listen(process.env.PORT, () => {
+process.env.PORT && app.listen(5000, () => {
     console.log("Server started :)")
 })
             
