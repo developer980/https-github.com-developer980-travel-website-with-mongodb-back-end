@@ -96,7 +96,7 @@ app.post("/post_user", (req, res) => {
                 subject: "Email confirmation",
                 html: `<div>
                     <b>Please verify your email</b>
-                    <a href = "http://localhost:3000/confirm_${token}">Link</a>
+                    <a href = "https://travel-website-with-mongodb-front-end-bszn-992f5shze.vercel.app/confirm_${token}">Link</a>
                 </div>`
             }
             transport.sendMail(mailOptions, (err, res) => {
@@ -253,6 +253,8 @@ app.post("/get_posts", (req, res) => {
     elements = []
     elements1 = []
     elements2 = []
+
+    //
 
     console.log(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
 
