@@ -333,7 +333,7 @@ app.post("/get_posts", (req, res) => {
                         img,
                         price:[{
                             website:"booking.com",
-                            value:price.replace("€ ", "")
+                            value:price.replace("€", "").trim()
                         }],
                         location: location.replace("Arată pe hartă", " ")
                     })
