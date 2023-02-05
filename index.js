@@ -311,7 +311,7 @@ app.post("/get_posts", (req, res) => {
                 const img = $(this).find(".c90a25d457").find("img").attr("src")
                 //console.log(pretty(img.attr("src")))
                 const price = price_text.split("lei")[0].split(".").join('')
-                console.log("price " + price + " " + price_text)
+                console.log("price " + price_text.split("lei")[0].split(".").join('') + " " + price_text.split("lei")[0].split(".").join('') / 4.90)
                 let notes = ""
                 
                 if (description.includes("Proprietate Călătorii durabile")) {
