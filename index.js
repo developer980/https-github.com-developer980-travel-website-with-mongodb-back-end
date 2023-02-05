@@ -322,7 +322,7 @@ app.post("/get_posts", (req, res) => {
                     rating_stars++
                 })
                 console.log("rating_stars: " + rating_stars)
-                const converted_price = parseInt(price) / 4.90
+                const converted_price = price / 4.90
                 if (url_text && price){
                     //description.length ?
                     elements.push({
@@ -333,7 +333,7 @@ app.post("/get_posts", (req, res) => {
                         img,
                         price:[{
                             website:"booking.com",
-                            value:price
+                            value:price_text.split("lei")[0].split(".").join('') / 4.90
                         }],
                         location: location.replace("Arată pe hartă", " ")
                     })
