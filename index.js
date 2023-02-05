@@ -18,7 +18,7 @@ const { createBrotliCompress } = require("zlib");
 app.use(cors())
 const connectionURl = process.env.MONGODB_URI;
 const database = "travelMDB"
-
+'mongodb://127.0.0.1:27017'
 require('dotenv').config();
 
 let db; 
@@ -333,7 +333,7 @@ app.post("/get_posts", (req, res) => {
                         img,
                         price:[{
                             website:"booking.com",
-                            value:converted_price.toFixed(2)
+                            value:price
                         }],
                         location: location.replace("Arată pe hartă", " ")
                     })
@@ -423,7 +423,8 @@ app.post("/get_posts", (req, res) => {
     })
 })
 
-process.env.PORT && app.listen(5000, () => {
+// process.env.PORT &&
+app.listen(3001, () => {
     console.log("Server started :)")
 })
             
