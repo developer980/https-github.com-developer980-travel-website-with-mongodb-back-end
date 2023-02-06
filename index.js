@@ -96,7 +96,7 @@ app.post("/post_user", (req, res) => {
                 subject: "Email confirmation",
                 html: `<div>
                     <b>Please verify your email</b>
-                    <a href = "https://travel-website-with-mongodb-front-end-bszn-992f5shze.vercel.app/confirm_${token}">Link</a>
+                    <a href = "https://travel-website-with-mongodb-front-end-bszn.vercel.app/confirm_${token}">Link</a>
                 </div>`
             }
             transport.sendMail(mailOptions, (err, res) => {
