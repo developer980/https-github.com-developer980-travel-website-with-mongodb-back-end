@@ -192,7 +192,7 @@ app.post("/reset_email", (req, res) => {
 
     const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    const token = ''
+    let token = ''
 
     for (let i = 0; i < 25; i++){
         token += characters[Math.random() * characters.length]
