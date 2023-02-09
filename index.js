@@ -119,6 +119,9 @@ app.post("/verify_token", (req, res) => {
         email:email
     }).project({
             _id: 0,
+            email: 1, 
+            username: 1,
+            password:1,
             token:token
         })
 
