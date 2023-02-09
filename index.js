@@ -186,6 +186,38 @@ app.post("/delete_user", (req, res) => {
     res.send("Account deleted")
 })
 
+app.post("/reset_email", (req, res) => {
+    
+    const email = req.body.email;
+
+    const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    const token = ''
+
+    for (let i = 0; i < 25; i++){
+        token += characters[Math.random() * characters.length]
+    }
+
+    db.collection("users").updateOne({ "email": email }, {
+        $set: {
+            "pass_token":token
+        }
+    })
+
+    const mailOptions = {
+        from: process.env.EML,
+        to: email,
+        subject: "Password reset",
+        html: `<div>
+            <b>Reset your password by accesing this </b>
+            <a href = "https://travel-website-with-mongodb-front-end-bszn.vercel.app/resetPasswordfor_${token}">Link</a>
+        </div>`
+    }
+    transport.sendMail(mailOptions, (err, res) => {
+        err ? console.log(err) : console.log("Email sent")
+    })  
+})
+
 app.post("/add_tofav", (req, res) => {
     const name = req.body.name
     const link = req.body.link
