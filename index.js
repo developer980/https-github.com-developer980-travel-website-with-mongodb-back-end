@@ -13,6 +13,8 @@ const nodemailer = require("nodemailer");
 const { cursorTo } = require("readline");
 const path = require("path")
 
+const bcrypt = require('bcryptjs')
+
 const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
 app.use(cors())
@@ -68,6 +70,11 @@ app.post("/post_user", (req, res) => {
     const username = req.body.username
     const password = req.body.password
     const token = req.body.token
+
+    const salt = bcrypt.genSaltSync(process.env.SLENGTH)
+
+    const hashedPassword = bcrypt.hashSync(password, salt)
+
     console.log("Endpoint available")
 
     const user_data = db.collection("users").find({
@@ -87,7 +94,7 @@ app.post("/post_user", (req, res) => {
             db.collection("pending_users").insertOne({
                 username,
                 email,
-                password,
+                password: hashedPassword,
                 token,
             })
             const mailOptions = {
@@ -162,7 +169,12 @@ app.post("/search_user", (req, res) => {
             })
     }, () => {
         console.log(result[0])
-        res.send(result[0])
+        bcrypt.compare(password, result[0].password, (err, succes) => {
+            succes && res.send({
+                email: result[0].email,
+                username:result[0].username
+            })
+        })
     })
 })
 
@@ -239,6 +251,8 @@ app.post("/remove_fromFav", (req, res) => {
         res.send(favs_list[0]);
     })
 })
+
+// app.post("/recovery_email", (req, res) => {})
 
 app.post("/get_posts", (req, res) => {
     let keyWord = req.body.keyWord
