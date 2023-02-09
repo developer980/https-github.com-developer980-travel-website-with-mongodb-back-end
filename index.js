@@ -195,7 +195,7 @@ app.post("/reset_email", (req, res) => {
     let token = ''
 
     for (let i = 0; i < 25; i++){
-        token += characters[Math.random() * characters.length]
+        token += characters[Math.floor(Math.random() * characters.length)]
     }
 
     db.collection("users").updateOne({ "email": email }, {
