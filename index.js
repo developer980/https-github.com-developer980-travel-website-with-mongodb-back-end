@@ -111,12 +111,16 @@ app.post("/post_user", (req, res) => {
 
 app.post("/verify_token", (req, res) => {
     const token = req.body.token
+    const email = req.body.email
     console.log(token)
     const response = []
     console.log("verifying...")
     const result = db.collection("pending_users").find({
-        token:token
-    })
+        email:email
+    }).project({
+            _id: 0,
+            token:token
+        })
 
     result.forEach(function (result, err) {
         err && console.log(err)
