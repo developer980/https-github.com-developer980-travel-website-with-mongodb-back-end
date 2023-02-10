@@ -218,6 +218,37 @@ app.post("/reset_email", (req, res) => {
     })  
 })
 
+app.post("/verify_token", (req, res) => {
+    const result = []
+    const token = req.body.token
+    const email = req.body.email
+    const response = db.collection("users").find({ email: email })
+    response.forEach(data => {
+        result.push(data)
+    }, () => {
+        result[0] && res.send("Token matches")
+    })
+})
+
+app.post("/reset_password", (req, res) => {
+    const password = req.body.password
+    const email = req.body.email
+    const token = req.body.token
+    const salt = bcrypt.genSaltSync(10)
+    const hashedPassword = bcrypt.hashSync(password, salt, (err, result) => {
+        err && console.log(err)
+        if (result) {
+            db.collection("users").updateOne({ email: email }, {
+                $set: {
+                    "password": hashedPassword,
+                    "pass_token":''
+                }
+            })
+        }
+        res.send("Password succesfully changed")
+    })
+})
+
 app.post("/add_tofav", (req, res) => {
     const name = req.body.name
     const link = req.body.link
