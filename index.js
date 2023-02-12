@@ -217,6 +217,7 @@ app.post("/reset_email", (req, res) => {
 app.post("/verify_user", (req, res) => {
     const result = []
     const token = req.body.token
+    console.log("token: " + token)
     const email = req.body.email
     const response = db.collection("users").find({ email: email })
     response.forEach(data => {
