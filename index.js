@@ -116,7 +116,7 @@ app.post("/post_user", (req, res) => {
 
 })
 
-app.post("/verify_user", (req, res) => {
+app.post("/verify_token", (req, res) => {
     const token = req.body.token
     const email = req.body.email
     //console.log(token)
@@ -212,7 +212,7 @@ app.post("/reset_email", (req, res) => {
     })  
 })
 
-app.post("/verify_token", (req, res) => {
+app.post("/verify_user", (req, res) => {
     const result = []
     const token = req.body.token
     const email = req.body.email
