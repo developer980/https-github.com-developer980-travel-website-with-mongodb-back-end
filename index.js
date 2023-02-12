@@ -222,9 +222,11 @@ app.post("/verify_user", (req, res) => {
     response.forEach(data => {
         result.push(data)
     }, () => {
-        console.log(result)
-        if (result[0].pass_token && token == result[0].pass_token)
+        console.log(result[0])
+        if (result[0].pass_token && token == result[0].pass_token) {
+            console.log("Token matches")
             res.send("Token matches")
+        }
         // res.send(result[0])
     })
 })
