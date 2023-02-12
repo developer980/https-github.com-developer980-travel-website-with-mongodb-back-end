@@ -224,6 +224,7 @@ app.post("/verify_user", (req, res) => {
     }, () => {
         console.log(response[0])
         // response[0].token == token && res.send("Token matches")
+        res.send(response[0])
     })
 })
 
