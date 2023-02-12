@@ -134,12 +134,14 @@ app.post("/verify_token", (req, res) => {
     }, () => {
        // db.close()
         response[0].token == token && console.log(response[0].email)
-        response[0].token == token && db.collection("users").insertOne({
-            email: response[0].email,
-            username: response[0].username,
-            password: response[0].password
-        })
-        response[0] && res.send(response[0])
+        if (response[0].token == token) {
+            db.collection("users").insertOne({
+                email: response[0].email,
+                username: response[0].username,
+                password: response[0].password
+            })
+            response[0] && res.send("Succesfully registered")
+        }
         db.collection("pending_users").deleteOne({token:token})
     })
     // cursorTo.array.forEach(element => {
