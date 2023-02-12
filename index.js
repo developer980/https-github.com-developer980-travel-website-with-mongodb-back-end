@@ -222,7 +222,7 @@ app.post("/verify_user", (req, res) => {
     response.forEach(data => {
         result.push(data)
     }, () => {
-        console.log(result[0])
+        console.log(result)
         if (result[0].pass_token && result[0].pass_token == token)
             res.send("Token matches")
         // res.send(result[0])
