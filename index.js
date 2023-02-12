@@ -124,13 +124,7 @@ app.post("/verify_token", (req, res) => {
     console.log("verifying...")
     const result = db.collection("pending_users").find({
         email:email
-    }).project({
-            _id: 0,
-            email: 1, 
-            username: 1,
-            password:1,
-            token:token
-        })
+    })
 
     result.forEach(function (result, err) {
         err && console.log(err)
@@ -139,7 +133,7 @@ app.post("/verify_token", (req, res) => {
             //res.send(result)
     }, () => {
        // db.close()
-        response[0] && console.log(response[0].email)
+        response[0].token == token && console.log(response[0].email)
         response[0] && db.collection("users").insertOne({
             email: response[0].email,
             username: response[0].username,
