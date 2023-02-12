@@ -223,7 +223,7 @@ app.post("/verify_user", (req, res) => {
         result.push(data)
     }, () => {
         console.log(result[0])
-        if (response[0].token && response[0].token == token)
+        if (response[0].pass_token && response[0].pass_token == token)
             res.send(result[0])
         // res.send(result[0])
     })
