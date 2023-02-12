@@ -119,7 +119,7 @@ app.post("/post_user", (req, res) => {
 app.post("/verify_user", (req, res) => {
     const token = req.body.token
     const email = req.body.email
-    console.log(token)
+    //console.log(token)
     const response = []
     console.log("verifying...")
     const result = db.collection("pending_users").find({
@@ -134,7 +134,7 @@ app.post("/verify_user", (req, res) => {
     }, () => {
        // db.close()
         response[0].token == token && console.log(response[0].email)
-        response[0] && db.collection("users").insertOne({
+        response[0].token == token && db.collection("users").insertOne({
             email: response[0].email,
             username: response[0].username,
             password: response[0].password
