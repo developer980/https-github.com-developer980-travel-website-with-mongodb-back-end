@@ -209,7 +209,7 @@ app.post("/reset_email", (req, res) => {
             <a href = "https://travel-website-with-mongodb-front-end-bszn.vercel.app/resetPasswordfor_${token}">Link</a>
         </div>`
     }
-    transport.sendMail(mailOptions, (err, res) => {
+    transport.sendMail(mailOptions, err => {
         err ? console.log(err) : res.send("Email sent")
     })  
 })
