@@ -236,21 +236,16 @@ app.post("/reset_password", (req, res) => {
     const password = req.body.password
     const email = req.body.email
     const token = req.body.token
-
-    bcrypt.genSaltSync(10, (err, salt) => {
-        bcrypt.hashSync(password, salt, (err, hashedPassword) => {
-            err && console.log(err)
-            if (hashedPassword) {
-                db.collection("users").updateOne({ email: email }, {
-                    $set: {
-                        "password": hashedPassword,
-                        "pass_token":''
-                    }
-                })
-            }
-            res.send("Password succesfully changed")
-        })
+    const salt = bcrypt.genSaltSync(10)
+    const hashedPassword = bcrypt.hashSync(password, salt)
+    db.collection("users").updateOne({ email: email }, {
+        $set: {
+            "password": hashedPassword,
+            "pass_token":''
+        }
     })
+    
+    res.send("Password succesfully changed")
 })
 
 app.post("/add_tofav", (req, res) => {
