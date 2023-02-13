@@ -210,9 +210,9 @@ app.post("/reset_email", (req, res) => {
         </div>`
     }
     transport.sendMail(mailOptions, err => {
-        err && console.log(err)
-        res.send("Email sent")
+        err ? console.log(err) : console.log("Email sent")
     })  
+    res.send("Email sent")
 })
 
 app.post("/verify_user", (req, res) => {
