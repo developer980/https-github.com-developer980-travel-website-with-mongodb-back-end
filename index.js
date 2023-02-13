@@ -236,18 +236,20 @@ app.post("/reset_password", (req, res) => {
     const password = req.body.password
     const email = req.body.email
     const token = req.body.token
-    const salt = bcrypt.genSaltSync(10)
-    const hashedPassword = bcrypt.hashSync(password, salt, (err, result) => {
-        err && console.log(err)
-        if (result) {
-            db.collection("users").updateOne({ email: email }, {
-                $set: {
-                    "password": hashedPassword,
-                    "pass_token":''
-                }
-            })
-        }
-        res.send("Password succesfully changed")
+    
+    bcrypt.genSaltSync(10, (err, salt) => {
+        bcrypt.hashSync(password, salt, (err, hashedPassword) => {
+            err && console.log(err)
+            if (result) {
+                db.collection("users").updateOne({ email: email }, {
+                    $set: {
+                        "password": hashedPassword,
+                        "pass_token":''
+                    }
+                })
+            }
+            res.send("Password succesfully changed")
+        })
     })
 })
 
