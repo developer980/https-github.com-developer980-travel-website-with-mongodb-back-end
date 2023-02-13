@@ -210,7 +210,8 @@ app.post("/reset_email", (req, res) => {
         </div>`
     }
     transport.sendMail(mailOptions, err => {
-        err ? console.log(err) : res.send("Email sent")
+        err && console.log(err)
+        res.send("Email sent")
     })  
 })
 
