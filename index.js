@@ -175,8 +175,8 @@ app.post("/search_user", (req, res) => {
             })
         })
     } catch (e) {
-        res.status(500).json({error:e.message})
-        res.status(500).send('error')
+        // res.status(500).json({error:e.message})
+        res.send('error')
     }
 })
 
