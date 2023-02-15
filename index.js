@@ -166,7 +166,7 @@ app.post("/search_user", (req, res) => {
             })
         }, () => {
             console.log(result[0])
-            result[0] ? bcrypt.compare(password, result[0].password, (err, succes) => {
+            result[0] && password ? bcrypt.compare(password, result[0].password, (err, succes) => {
                 console.log("password matches")
                 succes && res.send({
                     email: result[0].email,
