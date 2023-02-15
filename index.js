@@ -153,26 +153,30 @@ app.post("/search_user", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const result = []
-    const response = db.collection("users").find({email:email})
-    response.forEach(data => {
-        //if(response.email && response.password)
-        console.log(data)
+    try {
+        const response = db.collection("users").find({ email: email })
+        response.forEach(data => {
+            //if(response.email && response.password)
+            console.log(data)
             result.push({
                 email: data.email,
-                username:data.username,
+                username: data.username,
                 password: data.password,
-                id:data._id
+                id: data._id
             })
-    }, () => {
-        console.log(result[0])
-        bcrypt.compare(password, result[0].password, (err, succes) => {
-            console.log("password matches")
-            succes && res.send({
-                email: result[0].email,
-                username:result[0].username
+        }, () => {
+            console.log(result[0])
+            bcrypt.compare(password, result[0].password, (err, succes) => {
+                console.log("password matches")
+                succes && res.send({
+                    email: result[0].email,
+                    username: result[0].username
+                })
             })
         })
-    })
+    } catch (e) {
+        res.status(500).json({err:e.message})
+    }
 })
 
 app.post("/delete_user", (req, res) => {
