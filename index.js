@@ -7,11 +7,12 @@ const axios = require('axios');
 const cheerio  = require("cheerio");
 const pretty = require("pretty");
 const e = require("express");
-const src = require("./function1");
+const src = require("./Search_User");
 const { resolve } = require("path");
 const nodemailer = require("nodemailer");
 const { cursorTo } = require("readline");
 const path = require("path")
+const Search_User = require("Search_User")
 
 const bcrypt = require('bcryptjs')
 
@@ -151,36 +152,41 @@ app.post("/verify_token", (req, res) => {
 
 app.post("/search_user", (req, res) => {
     const email = req.body.email;
-    const password = req.body.password;
-    const result = []
-    try {
-        const response = db.collection("users").find({ email: email })
-        response.forEach(data => {
-            //if(response.email && response.password)
-            console.log(data)
-            result.push({
-                email: data.email,
-                username: data.username,
-                password: data.password,
-                id: data._id
-            })
-        }, () => {
-            console.log(result[0])
-            result[0] && password ? bcrypt.compare(password, result[0].password, (err, succes) => {
-                console.log("password matches")
-                succes ? res.send({
-                    email: result[0].email,
-                    username: result[0].username
-                }) : res.send("error")
-                err && res.send("error")
-            })
-                :
-                res.send('error')
-        })
-    } catch (e) {
-        // res.status(500).json({error:e.message})
-        res.send('error')
-    }
+    const password = req.body.password; 
+
+    Search_User(email, password, db, res)
+
+    // const email = req.body.email;
+    // const password = req.body.password;
+    // const result = []
+    // try {
+    //     const response = db.collection("users").find({ email: email })
+    //     response.forEach(data => {
+    //         //if(response.email && response.password)
+    //         console.log(data)
+    //         result.push({
+    //             email: data.email,
+    //             username: data.username,
+    //             password: data.password,
+    //             id: data._id
+    //         })
+    //     }, () => {
+    //         console.log(result[0])
+    //         result[0] && password ? bcrypt.compare(password, result[0].password, (err, succes) => {
+    //             console.log("password matches")
+    //             succes ? res.send({
+    //                 email: result[0].email,
+    //                 username: result[0].username
+    //             }) : res.send("error")
+    //             err && res.send("error")
+    //         })
+    //             :
+    //             res.send('error')
+    //     })
+    // } catch (e) {
+    //     // res.status(500).json({error:e.message})
+    //     res.send('error')
+    // }
 })
 
 app.post("/delete_user", (req, res) => {
