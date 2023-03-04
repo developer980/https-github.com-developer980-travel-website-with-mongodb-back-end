@@ -1,4 +1,4 @@
-export default function Search_User(email, password, db, res){
+module.exports = function Search_User(email, password, db, res){
         const result = []
         try {
             const response = db.collection("users").find({ email: email })
