@@ -13,7 +13,6 @@ const nodemailer = require("nodemailer");
 const { cursorTo } = require("readline");
 const path = require("path")
 const Search_User = require("./Search_User")
-let db = dbconfig()
 
 const bcrypt = require('bcryptjs')
 
@@ -50,6 +49,7 @@ console.log("URI: " + process.env.MONGODB_URI)
 //     }
 // )
 
+let db = dbconfig()
 const transport = nodemailer.createTransport({
     service: "hotmail",
     auth: {
