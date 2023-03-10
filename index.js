@@ -13,18 +13,17 @@ const nodemailer = require("nodemailer");
 const { cursorTo } = require("readline");
 const path = require("path")
 const Search_User = require("./Search_User")
+let db = dbconfig()
 
 const bcrypt = require('bcryptjs')
 
 const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
+const dbconfig = require("./dbconfig");
 app.use(cors())
 const connectionURl = process.env.MONGODB_URI;
 const database = "travelMDB"
-'mongodb://127.0.0.1:27017'
 require('dotenv').config();
-
-let db; 
 let elements = []
 let elements1 = []
 let elements2 = []
@@ -33,28 +32,23 @@ console.log(process.env.EML)
 console.log(process.env.PASS)
 console.log("URI: " + process.env.MONGODB_URI)
 
-mongoClient.connect(
-    connectionURl,
-    {useNewUrlParser:true},
-    (err, cli) => {
-        if(err) {
-            console.log("Unable to connect to the database: " + err)
-            return
-        }
+// mongoClient.connect(
+//     connectionURl,
+//     {useNewUrlParser:true},
+//     (err, cli) => {
+//         if(err) {
+//             console.log("Unable to connect to the database: " + err)
+//             return
+//         }
 
-        db = cli.db(database)
+//         db = cli.db(database)
 
-        // db.collection('posts').insertOne({
-        //     name:"Tudor",
-        //     age:20
-        // })
-
-        db.collection("pending_users").find(), (error, result) => {
-            error && console.log(error)
-            result && console.log(result)
-        }
-    }
-)
+//         // db.collection('posts').insertOne({
+//         //     name:"Tudor",
+//         //     age:20
+//         // })
+//     }
+// )
 
 const transport = nodemailer.createTransport({
     service: "hotmail",
