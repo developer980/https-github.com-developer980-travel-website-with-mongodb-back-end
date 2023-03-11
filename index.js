@@ -50,7 +50,7 @@ mongoClient.connect(
         //     name:"Tudor",
         //     age:20
         // })
-    }
+    },
 )
 
 // db.connect((err) => {
@@ -160,9 +160,12 @@ app.post("/search_user", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const result = []
-    const response = Search_User(email, password, db)
-    console.log("response" + response)
-    res.send(response)
+    // const response = Search_User(email, password, db)
+    // console.log("response" + response)
+    // res.send(response)
+    Search_User(email, password, db)
+        .then(result => res.send(result))
+        .catch(error => res.send(error))
     // try {
     //     const response = db.collection("users").find({ email: email })
     //     response.forEach(data => {
@@ -528,6 +531,9 @@ app.post("/get_posts", (req, res) => {
     })
 })
 
+module.exports = function response(res, data) {
+    res.send(data)
+}
 // process.env.PORT &&
 app.listen(3001, () => {
     console.log("Server started :)")
