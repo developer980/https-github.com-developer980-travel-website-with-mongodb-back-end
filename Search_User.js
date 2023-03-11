@@ -1,4 +1,4 @@
-module.exports = function Search_User(email, password, db, res){
+module.exports = function Search_User(email, password, db){
         const result = []
         try {
             const response = db.collection("users").find({ email: email })
@@ -13,19 +13,26 @@ module.exports = function Search_User(email, password, db, res){
                 })
             }, () => {
                 console.log(result[0])
-                result[0] && password ? bcrypt.compare(password, result[0].password, (err, succes) => {
-                    console.log("password matches")
-                    succes ? res.send({
-                        email: result[0].email,
-                        username: result[0].username
-                    }) : res.send("error")
-                    err && res.send("error")
-                })
-                    :
-                    res.send('error')
+                if (result[0]) {
+                    if(password) bcrypt.compare(password, result[0].password, (err, succes) => {
+                        console.log("password matches")
+                        // succes ? res.send({
+                        //     email: result[0].email,
+                        //     username: result[0].username
+                        // }) : res.send("error")
+                        // err && res.send("error")
+
+                        if (succes) return {
+                            email: result[0].email,
+                            username: result[0].username
+                        }
+                        else if (!succes || err) return "error"
+                    })
+                    else return "error"
+                }
             })
         } catch (e) {
             // res.status(500).json({error:e.message})
-            res.send('error')
+            return "error"
         }
 }
