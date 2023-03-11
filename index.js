@@ -14,7 +14,7 @@ const { cursorTo } = require("readline");
 const path = require("path")
 const Search_User = require("./Search_User")
 
-const db = require("./dbconfig")
+// const db = require("./dbconfig")
 
 const bcrypt = require('bcryptjs')
 
@@ -33,27 +33,29 @@ console.log(process.env.EML)
 console.log(process.env.PASS)
 console.log("URI: " + process.env.MONGODB_URI)
 
-// mongoClient.connect(
-//     connectionURl,
-//     {useNewUrlParser:true},
-//     (err, cli) => {
-//         if(err) {
-//             console.log("Unable to connect to the database: " + err)
-//             return
-//         }
+let db
 
-//         db = cli.db(database)
+mongoClient.connect(
+    connectionURl,
+    {useNewUrlParser:true},
+    (err, cli) => {
+        if(err) {
+            console.log("Unable to connect to the database: " + err)
+            return
+        }
 
-//         // db.collection('posts').insertOne({
-//         //     name:"Tudor",
-//         //     age:20
-//         // })
-//     }
-// )
+        db = cli.db(database)
 
-db.connect((err) => {
-    err ? console.log("Connection failed: " + err) : console.log("Succesfully connected")
-})
+        // db.collection('posts').insertOne({
+        //     name:"Tudor",
+        //     age:20
+        // })
+    }
+)
+
+// db.connect((err) => {
+//     err ? console.log("Connection failed: " + err) : console.log("Succesfully connected")
+// })
 
 const transport = nodemailer.createTransport({
     service: "hotmail",
