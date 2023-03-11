@@ -3,8 +3,10 @@ const mongoClient = mongodb.MongoClient;
 const connectionURl = process.env.MONGODB_URI;
 const database = "travelMDB"
 
-module.exports = function () {
-    let db
+
+let db
+
+module.exports.connect = function () {
     mongoClient.connect(
         connectionURl,
         {useNewUrlParser:true},
@@ -20,7 +22,11 @@ module.exports = function () {
             //     name:"Tudor",
             //     age:20
             // })
-            return db;
+            return db
         }
     )
+}
+
+module.exports.getClient = function () {
+    return db
 }

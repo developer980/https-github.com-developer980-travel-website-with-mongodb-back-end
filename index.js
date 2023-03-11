@@ -14,11 +14,13 @@ const { cursorTo } = require("readline");
 const path = require("path")
 const Search_User = require("./Search_User")
 
+const db = require("./dbconfig")
+
 const bcrypt = require('bcryptjs')
 
 const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
-const dbconfig = require("./dbconfig");
+// const dbconfig = require("./dbconfig");
 app.use(cors())
 const connectionURl = process.env.MONGODB_URI;
 const database = "travelMDB"
@@ -49,7 +51,10 @@ console.log("URI: " + process.env.MONGODB_URI)
 //     }
 // )
 
-let db = dbconfig()
+db.connect((err) => {
+    err ? console.log("Connection failed: " + err) : console.log("Succesfully connected")
+})
+
 const transport = nodemailer.createTransport({
     service: "hotmail",
     auth: {
