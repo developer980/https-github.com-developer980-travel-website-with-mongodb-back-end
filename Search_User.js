@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 module.exports = function Search_User(email, password, db) {
     return new Promise((resolve, reject) => {
         const result = []
