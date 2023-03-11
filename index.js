@@ -161,6 +161,7 @@ app.post("/search_user", (req, res) => {
     const password = req.body.password;
     const result = []
     const response = Search_User(email, password, db)
+    console.log("response" + response)
     res.send(response)
     // try {
     //     const response = db.collection("users").find({ email: email })
