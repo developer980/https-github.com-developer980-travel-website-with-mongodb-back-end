@@ -1,4 +1,6 @@
-module.exports = function Search_User(email, password, db){
+const bcrypt = require('bcryptjs')
+
+module.exports = function Search_User(email, password, db) {
         const result = []
         try {
             const response = db.collection("users").find({ email: email })
