@@ -21,6 +21,8 @@ module.exports = function expedia(keyWord, checkIn, checkOut, elements1) {
                 
             //  console.log("name: " + name.text())
             //  console.log("url: " + url)
+                
+                console.log("expedia: " + name)
 
                 $(this).find(".uitk-gallery-carousel-items").children(".uitk-gallery-carousel-item-current").each(function () {
                     img = $(this).find("img").attr("src")
