@@ -22,6 +22,8 @@ const bcrypt = require('bcryptjs')
 const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
 const send_email = require("./email/send_email");
+const verify_user = require("./user_auth/verify_user");
+
 // const dbconfig = require("./dbconfig");
 app.use(cors())
 const connectionURl = process.env.MONGODB_URI;
@@ -130,7 +132,6 @@ app.post("/verify_token", (req, res) => {
 })
 
 app.post("/search_user", (req, res) => {
-
     const email = req.body.email;
     const password = req.body.password;
 
@@ -148,56 +149,29 @@ app.post("/delete_user", (req, res) => {
 })
 
 app.post("/reset_email", (req, res) => {
-    
     const email = req.body.email;
+
     send_email(db, email, transport)
         .then(result => res.send(result))
         .catch(error => console.log("Email error: " + error))
-    // const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-    // let token = ''
-
-    // for (let i = 0; i < 25; i++){
-    //     token += characters[Math.floor(Math.random() * characters.length)]
-    // }
-
-    // db.collection("users").updateOne({ "email": email }, {
-    //     $set: {
-    //         "pass_token":token
-    //     }
-    // })
-
-    // const mailOptions = {
-    //     from: process.env.EML,
-    //     to: email,
-    //     subject: "Password reset",
-    //     html: `<div>
-    //         <b>Reset your password by accesing this </b>
-    //         <a href = "https://travel-website-with-mongodb-front-end-bszn.vercel.app/resetPasswordfor_${token}">Link</a>
-    //     </div>`
-    // }
-    // transport.sendMail(mailOptions, err => {
-    //     err ? console.log(err) : console.log("Email sent")
-    // })  
-    // res.send("Email sent")
 })
 
 app.post("/verify_user", (req, res) => {
-    const result = []
     const token = req.body.token
     console.log("token: " + token)
     const email = req.body.email
-    const response = db.collection("users").find({ email: email })
-    response.forEach(data => {
-        result.push(data)
-    }, () => {
-        console.log(result[0])
-        if (result[0].pass_token && token == result[0].pass_token) {
-            console.log("Token matches")
-            res.send("Token matches")
-        }
-        // res.send(result[0])
-    })
+    verify_user(db, email, token).then(result => res.send(result))
+    // const response = db.collection("users").find({ email: email })
+    // response.forEach(data => {
+    //     result.push(data)
+    // }, () => {
+    //     console.log(result[0])
+    //     if (result[0].pass_token && token == result[0].pass_token) {
+    //         console.log("Token matches")
+    //         res.send("Token matches")
+    //     }
+    //     // res.send(result[0])
+    // })
 })
 
 app.post("/reset_password", (req, res) => {
