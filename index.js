@@ -367,6 +367,8 @@ app.post("/get_posts", (req, res) => {
     
     Promise.all([promise, promise1]).then((values) => {
 
+        console.log("values: ")
+        console.log(values[0])
         const final_result = []
 
         const test_array1 = []
