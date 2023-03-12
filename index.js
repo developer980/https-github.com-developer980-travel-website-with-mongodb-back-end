@@ -13,6 +13,7 @@ const nodemailer = require("nodemailer");
 const { cursorTo } = require("readline");
 const path = require("path")
 const Search_User = require("./Search_User")
+const verify_token = require("./verify_token")
 
 // const db = require("./dbconfig")
 
@@ -121,79 +122,49 @@ app.post("/post_user", (req, res) => {
 app.post("/verify_token", (req, res) => {
     const token = req.body.token
     const email = req.body.email
-    //console.log(token)
-    const response = []
-    console.log("verifying...")
-    const result = db.collection("pending_users").find({
-        email:email
-    })
 
-    result.forEach(function (result, err) {
-        err && console.log(err)
-        console.log(result)
-            response.push(result)
-            //res.send(result)
-    }, () => {
-       // db.close()
-        response[0].token == token && console.log(response[0].email)
-        if (response[0].token == token) {
-            db.collection("users").insertOne({
-                email: response[0].email,
-                username: response[0].username,
-                password: response[0].password
-            })
-            response[0] && res.send("Succesfully registered")
-        }
-        db.collection("pending_users").deleteOne({token:token})
-    })
+    verify_token().then(result => res.send(result)).catch(reject => console.log("Token rejected"))
+    // const token = req.body.token
+    // const email = req.body.email
+    // //console.log(token)
+    // const response = []
+    // console.log("verifying...")
+    // const result = db.collection("pending_users").find({
+    //     email:email
+    // })
+
+    // result.forEach(function (result, err) {
+    //     err && console.log(err)
+    //     console.log(result)
+    //         response.push(result)
+    //         //res.send(result)
+    // }, () => {
+    //    // db.close()
+    //     response[0].token == token && console.log(response[0].email)
+    //     if (response[0].token == token) {
+    //         db.collection("users").insertOne({
+    //             email: response[0].email,
+    //             username: response[0].username,
+    //             password: response[0].password
+    //         })
+    //         response[0] && res.send("Succesfully registered")
+    //     }
+    //     db.collection("pending_users").deleteOne({token:token})
+    // })
     // cursorTo.array.forEach(element => {
     //     console.log("element" + element)
     // });
 })
 
 app.post("/search_user", (req, res) => {
-    // const email = req.body.email;
-    // const password = req.body.password; 
-
-    // Search_User(email, password, db, res)
 
     const email = req.body.email;
     const password = req.body.password;
-    const result = []
-    // const response = Search_User(email, password, db)
-    // console.log("response" + response)
-    // res.send(response)
+
     Search_User(email, password, db)
         .then(result => res.send(result))
         .catch(error => res.send(error))
-    // try {
-    //     const response = db.collection("users").find({ email: email })
-    //     response.forEach(data => {
-    //         //if(response.email && response.password)
-    //         console.log(data)
-    //         result.push({
-    //             email: data.email,
-    //             username: data.username,
-    //             password: data.password,
-    //             id: data._id
-    //         })
-    //     }, () => {
-    //         console.log(result[0])
-    //         result[0] && password ? bcrypt.compare(password, result[0].password, (err, succes) => {
-    //             console.log("password matches")
-    //             succes ? res.send({
-    //                 email: result[0].email,
-    //                 username: result[0].username
-    //             }) : res.send("error")
-    //             err && res.send("error")
-    //         })
-    //             :
-    //             res.send('error')
-    //     })
-    // } catch (e) {
-    //     // res.status(500).json({error:e.message})
-    //     res.send('error')
-    // }
+    
 })
 
 app.post("/delete_user", (req, res) => {
