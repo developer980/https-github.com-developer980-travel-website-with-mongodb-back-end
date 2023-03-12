@@ -21,6 +21,7 @@ const bcrypt = require('bcryptjs')
 
 const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
+const send_email = require("./email/send_email");
 // const dbconfig = require("./dbconfig");
 app.use(cors())
 const connectionURl = process.env.MONGODB_URI;
@@ -123,37 +124,9 @@ app.post("/verify_token", (req, res) => {
     const token = req.body.token
     const email = req.body.email
 
-    verify_token(db, token, email).then(result => res.send(result)).catch(reject => console.log("Token rejected"))
-    // const token = req.body.token
-    // const email = req.body.email
-    // //console.log(token)
-    // const response = []
-    // console.log("verifying...")
-    // const result = db.collection("pending_users").find({
-    //     email:email
-    // })
-
-    // result.forEach(function (result, err) {
-    //     err && console.log(err)
-    //     console.log(result)
-    //         response.push(result)
-    //         //res.send(result)
-    // }, () => {
-    //    // db.close()
-    //     response[0].token == token && console.log(response[0].email)
-    //     if (response[0].token == token) {
-    //         db.collection("users").insertOne({
-    //             email: response[0].email,
-    //             username: response[0].username,
-    //             password: response[0].password
-    //         })
-    //         response[0] && res.send("Succesfully registered")
-    //     }
-    //     db.collection("pending_users").deleteOne({token:token})
-    // })
-    // cursorTo.array.forEach(element => {
-    //     console.log("element" + element)
-    // });
+    verify_token(db, token, email)
+        .then(result => res.send(result))
+        .catch(reject => console.log("Token rejected"))
 })
 
 app.post("/search_user", (req, res) => {
@@ -177,34 +150,36 @@ app.post("/delete_user", (req, res) => {
 app.post("/reset_email", (req, res) => {
     
     const email = req.body.email;
+    send_email(db, email, transport)
+        .then(result => res.send(result))
+        .catch(error => console.log("Email error: " + error))
+    // const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    // let token = ''
 
-    let token = ''
+    // for (let i = 0; i < 25; i++){
+    //     token += characters[Math.floor(Math.random() * characters.length)]
+    // }
 
-    for (let i = 0; i < 25; i++){
-        token += characters[Math.floor(Math.random() * characters.length)]
-    }
+    // db.collection("users").updateOne({ "email": email }, {
+    //     $set: {
+    //         "pass_token":token
+    //     }
+    // })
 
-    db.collection("users").updateOne({ "email": email }, {
-        $set: {
-            "pass_token":token
-        }
-    })
-
-    const mailOptions = {
-        from: process.env.EML,
-        to: email,
-        subject: "Password reset",
-        html: `<div>
-            <b>Reset your password by accesing this </b>
-            <a href = "https://travel-website-with-mongodb-front-end-bszn.vercel.app/resetPasswordfor_${token}">Link</a>
-        </div>`
-    }
-    transport.sendMail(mailOptions, err => {
-        err ? console.log(err) : console.log("Email sent")
-    })  
-    res.send("Email sent")
+    // const mailOptions = {
+    //     from: process.env.EML,
+    //     to: email,
+    //     subject: "Password reset",
+    //     html: `<div>
+    //         <b>Reset your password by accesing this </b>
+    //         <a href = "https://travel-website-with-mongodb-front-end-bszn.vercel.app/resetPasswordfor_${token}">Link</a>
+    //     </div>`
+    // }
+    // transport.sendMail(mailOptions, err => {
+    //     err ? console.log(err) : console.log("Email sent")
+    // })  
+    // res.send("Email sent")
 })
 
 app.post("/verify_user", (req, res) => {
