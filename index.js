@@ -273,7 +273,8 @@ app.post("/get_posts", (req, res) => {
     console.log(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
 
     const promise = new Promise((resolve) => {
-        expedia(keyWord, checkIn, checkOut, elements1).then((result) => {
+        expedia(keyWord, checkIn, checkOut).then((result) => {
+            console.log("result: ")
             console.log(result)
             resolve(result)
         })

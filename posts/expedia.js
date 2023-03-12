@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cheerio  = require("cheerio");
 
-module.exports = function expedia(keyWord, checkIn, checkOut, elements1) {
+module.exports = function expedia(keyWord, checkIn, checkOut) {
     
     let elements = []
     let elements1 = []
