@@ -123,7 +123,7 @@ app.post("/verify_token", (req, res) => {
     const token = req.body.token
     const email = req.body.email
 
-    verify_token(token, email).then(result => res.send(result)).catch(reject => console.log("Token rejected"))
+    verify_token(db, token, email).then(result => res.send(result)).catch(reject => console.log("Token rejected"))
     // const token = req.body.token
     // const email = req.body.email
     // //console.log(token)

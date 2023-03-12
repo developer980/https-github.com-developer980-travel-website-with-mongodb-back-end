@@ -1,4 +1,4 @@
-module.exports = function verify_token(token, email) {
+module.exports = function verify_token(db, token, email) {
     return new Promise((resolve, reject) => {
         //console.log(token)
         const response = []
