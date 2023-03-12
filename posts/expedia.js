@@ -11,7 +11,7 @@ module.exports = function expedia(keyWord, checkIn, checkOut) {
         axios.get(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`).then((data) => {
             const $ = cheerio.load(data.data)
             $('.uitk-card').each(function () {
-                const name = $(this).find(".uitk-layout-flex").find("h2")
+                const name = $(this).find(".uitk-layout-flex").find("h4")
                 const price = $(this).find(".uitk-layout-flex").find(".uitk-layout-flex").find(".uitk-layout-flex").children(".uitk-layout-flex").children(".uitk-type-200")
                 const location = $(this).find(".uitk-layout-flex").children(".uitk-spacing").find("div .truncate-lines-2")
 
