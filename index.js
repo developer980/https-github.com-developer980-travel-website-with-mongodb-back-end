@@ -273,7 +273,10 @@ app.post("/get_posts", (req, res) => {
     console.log(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
 
     const promise = new Promise((resolve) => {
-        expedia(keyWord, checkIn, checkOut, elements1).then((result) => resolve(result))
+        expedia(keyWord, checkIn, checkOut, elements1).then((result) => {
+            console.log(result)
+            resolve(result)
+        })
         // axios.get(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`).then((data) => {
         //     const $ = cheerio.load(data.data)
         //     $('.uitk-card').each(function () {
