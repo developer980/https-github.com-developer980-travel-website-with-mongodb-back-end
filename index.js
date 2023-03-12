@@ -26,6 +26,7 @@ const verify_user = require("./user_auth/verify_user");
 const get_favourites = require("./favourites/get_favourites");
 const remove_fromFavourites = require("./favourites/remove_fromFavourites");
 const expedia = require("./posts/expedia");
+const booking = require("./posts/booking");
 
 // const dbconfig = require("./dbconfig");
 app.use(cors())
@@ -207,16 +208,6 @@ app.post("/add_tofav", (req, res) => {
 app.post("/get_favourites", (req, res) => {
     const email = req.body.email
     get_favourites(db, email).then(result => res.send(result))
-    // const favs = db.collection("users").find({ email: email }).project({
-    //     _id: 0,
-    //     favs:1
-    // })
-
-    // favs.forEach(data => {
-    //     favs_list.push(data)
-    // }, () => {        
-    //     res.send(favs_list[0]);
-    // })
 })
 
 app.post("/remove_fromFav", (req, res) => {
@@ -224,25 +215,6 @@ app.post("/remove_fromFav", (req, res) => {
     const name = req.body.name
 
     remove_fromFavourites(db, name, email).then(result => res.send(result))
-    // db.collection("users").update({ email: email }, {
-    //         $pull: {
-    //             "favs": {
-    //                 name:name
-    //         }
-    //     }
-    // })
-    
-    // const favs_list = []
-    // const favs = db.collection("users").find({ email: email }).project({
-    //     _id: 0,
-    //     favs:1
-    // })
-    // favs.forEach(data => {
-    //     console.log(data)
-    //     favs_list.push(data)
-    // }, () => {        
-    //     res.send(favs_list[0]);
-    // })
 })
 
 // app.post("/recovery_email", (req, res) => {})
@@ -273,95 +245,58 @@ app.post("/get_posts", (req, res) => {
     console.log(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
 
     const promise = new Promise((resolve) => {
-        expedia(keyWord, checkIn, checkOut).then((result) => {
-            console.log("result: ")
-            console.log(result)
-            resolve(result)
-        })
-        // axios.get(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`).then((data) => {
-        //     const $ = cheerio.load(data.data)
-        //     $('.uitk-card').each(function () {
-        //         const name = $(this).find(".uitk-layout-flex").find("h2")
-        //         const price = $(this).find(".uitk-layout-flex").find(".uitk-layout-flex").find(".uitk-layout-flex").children(".uitk-layout-flex").children(".uitk-type-200")
-        //         const location = $(this).find(".uitk-layout-flex").children(".uitk-spacing").find("div .truncate-lines-2")
-
-        //         console.log("Location " + location.text())
-        //         let url = $(this).find("a").attr("href")
-        //         let img;
-
-        //         if (url && !url.includes("https://www.expedia.com")) {
-        //             url = "https://www.expedia.com" + $(this).find("a").attr("href")
-        //         } 
-                
-                
-        //       //  console.log("name: " + name.text())
-        //       //  console.log("url: " + url)
-
-        //         $(this).find(".uitk-gallery-carousel-items").children(".uitk-gallery-carousel-item-current").each(function () {
-        //             img = $(this).find("img").attr("src")
-        //         })
-
-        //         elements1.push({
-        //             name: name.text(),
-        //             price: price.text().split(" ")[0].substring(1).replace(",", "") / 1.09,
-        //             location:location.text(),
-        //             img,
-        //             url:[url]
-        //         })
-        //     })
-        //     //console.log("l2 " + elements1.length)
-        //     resolve(elements1)
-        // })
+        expedia(keyWord, checkIn, checkOut).then((result) => resolve(result))
     })
 
     console.log(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
 
     const promise1 = new Promise((resolve) => {
-        axios.get(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
-        .then((data) => {
+        booking(keyWord, checkIn, checkOut).then(result => resolve(result))
+        // axios.get(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
+        // .then((data) => {
 
-            const $ = cheerio.load(data.data)
-            !elements.length && $('.d20f4628d0').each(function (i, elem) {
-                let rating_stars = 0
-                //console.log("text " + $(this).text())
-                const url_text = $(this).find(".ef8295f3e6").find(".fcab3ed991").text();
-                const url_href = $(this).find(".ef8295f3e6").children("div").find("a").attr("href")
-                const description = $(this).find(".ef8295f3e6").children(".d8eab2cf7f").text()
-                const location = $(this).find(".ef8295f3e6").children("div").children(".a1fbd102d9").children("a").children("span").children(".f4bd0794db").text();
-                const price_text = $(this).find('.fd1924b122').find(".fbd1d3018c ").text()
-                const img = $(this).find(".c90a25d457").find("img").attr("src")
-                //console.log(pretty(img.attr("src")))
-                const price = price_text.split("lei")[0].split(".").join('')
-                console.log("price " + price_text.split("lei")[0].split(".").join('') + " " + price_text.split("lei")[0].split(".").join('') / 4.90)
-                let notes = ""
+        //     const $ = cheerio.load(data.data)
+        //     !elements.length && $('.d20f4628d0').each(function (i, elem) {
+        //         let rating_stars = 0
+        //         //console.log("text " + $(this).text())
+        //         const url_text = $(this).find(".ef8295f3e6").find(".fcab3ed991").text();
+        //         const url_href = $(this).find(".ef8295f3e6").children("div").find("a").attr("href")
+        //         const description = $(this).find(".ef8295f3e6").children(".d8eab2cf7f").text()
+        //         const location = $(this).find(".ef8295f3e6").children("div").children(".a1fbd102d9").children("a").children("span").children(".f4bd0794db").text();
+        //         const price_text = $(this).find('.fd1924b122').find(".fbd1d3018c ").text()
+        //         const img = $(this).find(".c90a25d457").find("img").attr("src")
+        //         //console.log(pretty(img.attr("src")))
+        //         const price = price_text.split("lei")[0].split(".").join('')
+        //         console.log("price " + price_text.split("lei")[0].split(".").join('') + " " + price_text.split("lei")[0].split(".").join('') / 4.90)
+        //         let notes = ""
                 
-                if (description.includes("Proprietate Călătorii durabile")) {
-                    notes = "Travel sustenabillity property"
-                }
+        //         if (description.includes("Proprietate Călătorii durabile")) {
+        //             notes = "Travel sustenabillity property"
+        //         }
         
-                $(this).find(".b978843432").find(".fbb11b26f5").children("span").each(function (item) {
-                    rating_stars++
-                })
-                console.log("rating_stars: " + rating_stars)
-                const converted_price = price / 4.90
-                if (url_text && price){
-                    //description.length ?
-                    elements.push({
-                        url_text,
-                        url_href:[url_href],
-                        rating_stars,
-                        notes,
-                        img,
-                        price:[{
-                            website:"booking.com",
-                            value:price.replace("€", "").trim()
-                        }],
-                        location: location.replace("Arată pe hartă", " ")
-                    })
-                }
-            })
-            resolve(elements)
-        })
+        //         $(this).find(".b978843432").find(".fbb11b26f5").children("span").each(function (item) {
+        //             rating_stars++
+        //         })
+        //         console.log("rating_stars: " + rating_stars)
+        //         const converted_price = price / 4.90
+        //         if (url_text && price){
+        //             //description.length ?
+        //             elements.push({
+        //                 url_text,
+        //                 url_href:[url_href],
+        //                 rating_stars,
+        //                 notes,
+        //                 img,
+        //                 price:[{
+        //                     website:"booking.com",
+        //                     value:price.replace("€", "").trim()
+        //                 }],
+        //                 location: location.replace("Arată pe hartă", " ")
+        //             })
+        //         }
+        //     })
+        //     resolve(elements)
+        // })
 
     })
     
