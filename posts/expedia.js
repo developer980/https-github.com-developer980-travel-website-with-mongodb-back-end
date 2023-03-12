@@ -35,7 +35,7 @@ module.exports = function expedia(keyWord, checkIn, checkOut, elements1) {
             })
         })
         //console.log("l2 " + elements1.length)
-        // resolve(elements1)
+        resolve(elements1)
     })
     })
 }
