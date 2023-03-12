@@ -24,6 +24,8 @@ const { createBrotliCompress } = require("zlib");
 const send_email = require("./email/send_email");
 const verify_user = require("./user_auth/verify_user");
 const get_favourites = require("./favourites/get_favourites");
+const remove_fromFavourites = require("./favourites/remove_fromFavourites");
+const expedia = require("./posts/expedia");
 
 // const dbconfig = require("./dbconfig");
 app.use(cors())
@@ -220,25 +222,27 @@ app.post("/get_favourites", (req, res) => {
 app.post("/remove_fromFav", (req, res) => {
     const email = req.body.email
     const name = req.body.name
-    db.collection("users").update({ email: email }, {
-            $pull: {
-                "favs": {
-                    name:name
-            }
-        }
-    })
+
+    remove_fromFavourites(db, name, email).then(result => res.send(result))
+    // db.collection("users").update({ email: email }, {
+    //         $pull: {
+    //             "favs": {
+    //                 name:name
+    //         }
+    //     }
+    // })
     
-    const favs_list = []
-    const favs = db.collection("users").find({ email: email }).project({
-        _id: 0,
-        favs:1
-    })
-    favs.forEach(data => {
-        console.log(data)
-        favs_list.push(data)
-    }, () => {        
-        res.send(favs_list[0]);
-    })
+    // const favs_list = []
+    // const favs = db.collection("users").find({ email: email }).project({
+    //     _id: 0,
+    //     favs:1
+    // })
+    // favs.forEach(data => {
+    //     console.log(data)
+    //     favs_list.push(data)
+    // }, () => {        
+    //     res.send(favs_list[0]);
+    // })
 })
 
 // app.post("/recovery_email", (req, res) => {})
@@ -269,40 +273,41 @@ app.post("/get_posts", (req, res) => {
     console.log(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
 
     const promise = new Promise((resolve) => {
-        axios.get(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`).then((data) => {
-            const $ = cheerio.load(data.data)
-            $('.uitk-card').each(function () {
-                const name = $(this).find(".uitk-layout-flex").find("h2")
-                const price = $(this).find(".uitk-layout-flex").find(".uitk-layout-flex").find(".uitk-layout-flex").children(".uitk-layout-flex").children(".uitk-type-200")
-                const location = $(this).find(".uitk-layout-flex").children(".uitk-spacing").find("div .truncate-lines-2")
+        expedia(keyWord, checkIn, checkOut, elements1).then(() => resolve(elements1))
+        // axios.get(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`).then((data) => {
+        //     const $ = cheerio.load(data.data)
+        //     $('.uitk-card').each(function () {
+        //         const name = $(this).find(".uitk-layout-flex").find("h2")
+        //         const price = $(this).find(".uitk-layout-flex").find(".uitk-layout-flex").find(".uitk-layout-flex").children(".uitk-layout-flex").children(".uitk-type-200")
+        //         const location = $(this).find(".uitk-layout-flex").children(".uitk-spacing").find("div .truncate-lines-2")
 
-                console.log("Location " + location.text())
-                let url = $(this).find("a").attr("href")
-                let img;
+        //         console.log("Location " + location.text())
+        //         let url = $(this).find("a").attr("href")
+        //         let img;
 
-                if (url && !url.includes("https://www.expedia.com")) {
-                    url = "https://www.expedia.com" + $(this).find("a").attr("href")
-                } 
+        //         if (url && !url.includes("https://www.expedia.com")) {
+        //             url = "https://www.expedia.com" + $(this).find("a").attr("href")
+        //         } 
                 
                 
-              //  console.log("name: " + name.text())
-              //  console.log("url: " + url)
+        //       //  console.log("name: " + name.text())
+        //       //  console.log("url: " + url)
 
-                $(this).find(".uitk-gallery-carousel-items").children(".uitk-gallery-carousel-item-current").each(function () {
-                    img = $(this).find("img").attr("src")
-                })
+        //         $(this).find(".uitk-gallery-carousel-items").children(".uitk-gallery-carousel-item-current").each(function () {
+        //             img = $(this).find("img").attr("src")
+        //         })
 
-                elements1.push({
-                    name: name.text(),
-                    price: price.text().split(" ")[0].substring(1).replace(",", "") / 1.09,
-                    location:location.text(),
-                    img,
-                    url:[url]
-                })
-            })
-            //console.log("l2 " + elements1.length)
-            resolve(elements1)
-        })
+        //         elements1.push({
+        //             name: name.text(),
+        //             price: price.text().split(" ")[0].substring(1).replace(",", "") / 1.09,
+        //             location:location.text(),
+        //             img,
+        //             url:[url]
+        //         })
+        //     })
+        //     //console.log("l2 " + elements1.length)
+        //     resolve(elements1)
+        // })
     })
 
     console.log(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
