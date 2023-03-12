@@ -33,7 +33,7 @@ const connectionURl = process.env.MONGODB_URI;
 const database = "travelMDB"
 require('dotenv').config();
 let elements = []
-let elements1 = []
+// let elements1 = []
 let elements2 = []
 
 // console.log(process.env.EML)
@@ -265,7 +265,7 @@ app.post("/get_posts", (req, res) => {
     //console.log(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}`)
 
     elements = []
-    elements1 = []
+    // elements1 = []
     elements2 = []
 
     //

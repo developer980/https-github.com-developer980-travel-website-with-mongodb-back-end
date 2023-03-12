@@ -2,6 +2,11 @@ const axios = require('axios');
 const cheerio  = require("cheerio");
 
 module.exports = function expedia(keyWord, checkIn, checkOut, elements1) {
+    
+    let elements = []
+    let elements1 = []
+    let elements2 = []
+
     return new Promise((resolve) => {
         axios.get(`https://www.expedia.com/Hotel-Search?destination=${keyWord}&startDate=${checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&endDate=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`).then((data) => {
             const $ = cheerio.load(data.data)
