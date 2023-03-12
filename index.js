@@ -23,6 +23,7 @@ const multer = require("multer");
 const { createBrotliCompress } = require("zlib");
 const send_email = require("./email/send_email");
 const verify_user = require("./user_auth/verify_user");
+const get_favourites = require("./favourites/get_favourites");
 
 // const dbconfig = require("./dbconfig");
 app.use(cors())
@@ -160,18 +161,8 @@ app.post("/verify_user", (req, res) => {
     const token = req.body.token
     console.log("token: " + token)
     const email = req.body.email
+
     verify_user(db, email, token).then(result => res.send(result))
-    // const response = db.collection("users").find({ email: email })
-    // response.forEach(data => {
-    //     result.push(data)
-    // }, () => {
-    //     console.log(result[0])
-    //     if (result[0].pass_token && token == result[0].pass_token) {
-    //         console.log("Token matches")
-    //         res.send("Token matches")
-    //     }
-    //     // res.send(result[0])
-    // })
 })
 
 app.post("/reset_password", (req, res) => {
@@ -213,34 +204,27 @@ app.post("/add_tofav", (req, res) => {
 
 app.post("/get_favourites", (req, res) => {
     const email = req.body.email
-    const favs_list = []
-    const favs = db.collection("users").find({ email: email }).project({
-        _id: 0,
-        favs:1
-    })
+    get_favourites(db, email).then(result => res.send(result))
+    // const favs = db.collection("users").find({ email: email }).project({
+    //     _id: 0,
+    //     favs:1
+    // })
 
-    // cursorTo
-
-    favs.forEach(data => {
-        // console.log("sending data")
-        // console.log(data)
-        favs_list.push(data)
-    }, () => {        
-        res.send(favs_list[0]);
-        // return
-    })
-    // console.log(favs)
-    // console.log("getting favs")
+    // favs.forEach(data => {
+    //     favs_list.push(data)
+    // }, () => {        
+    //     res.send(favs_list[0]);
+    // })
 })
 
 app.post("/remove_fromFav", (req, res) => {
     const email = req.body.email
     const name = req.body.name
     db.collection("users").update({ email: email }, {
-        $pull: {
-            "favs": {
-                name:name
-        }
+            $pull: {
+                "favs": {
+                    name:name
+            }
         }
     })
     
