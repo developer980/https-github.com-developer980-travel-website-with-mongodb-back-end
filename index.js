@@ -3,23 +3,13 @@ const app = express()
 const mongodb = require("mongodb");
 const mongoClient = mongodb.MongoClient;
 const cors = require('cors')
-const axios = require('axios');
-const cheerio  = require("cheerio");
-const pretty = require("pretty");
-const e = require("express");
-const { resolve } = require("path");
 const nodemailer = require("nodemailer");
-const { cursorTo } = require("readline");
-const path = require("path")
 const Search_User = require("./user_auth/search_User")
 const verify_token = require("./user_auth/verify_token")
 
 // const db = require("./dbconfig")
 
 const bcrypt = require('bcryptjs')
-
-const multer = require("multer");
-const { createBrotliCompress } = require("zlib");
 const send_email = require("./email/send_email");
 const verify_user = require("./user_auth/verify_user");
 const get_favourites = require("./favourites/get_favourites");
@@ -27,6 +17,7 @@ const remove_fromFavourites = require("./favourites/remove_fromFavourites");
 const expedia = require("./posts/expedia");
 const booking = require("./posts/booking");
 const create_finalList = require("./posts/create_finalList");
+const post_user = require("./user_auth/post_user");
 
 // const dbconfig = require("./dbconfig");
 app.use(cors())
@@ -72,49 +63,9 @@ app.post("/post_user", (req, res) => {
     const password = req.body.password
     const token = req.body.token
 
-    const salt = bcrypt.genSaltSync(process.env.SLENGTH)
-
-    const hashedPassword = bcrypt.hashSync(password, salt)
-
-    console.log("Endpoint available")
-
-    const user_data = db.collection("users").find({
-        email:email
-    })
-    
-
-    const response = []
-
-    user_data.forEach((result, err) => {
-        console.log(result)
-        response.push(result)
-    }, () => {
-        if (response[0])
-            res.send("Email is invalid") 
-        else {
-            db.collection("pending_users").insertOne({
-                username,
-                email,
-                password: hashedPassword,
-                token,
-            })
-            const mailOptions = {
-                from: process.env.EML,
-                to: email,
-                subject: "Email confirmation",
-                html: `<div>
-                    <b>Please verify your email</b>
-                    <a href = "https://travel-website-with-mongodb-front-end-bszn.vercel.app/confirm_${token}">Link</a>
-                </div>`
-            }
-            transport.sendMail(mailOptions, (err, res) => {
-                err ? console.log(err) : console.log("Email sent")
-            })
-            res.send("Email sent")
-        }
-    })
-
-
+    post_user(db, email, username, password, token, transport)
+        .then(result => res.send(result))
+        .catch(err => res.send(err))
 })
 
 app.post("/verify_token", (req, res) => {
