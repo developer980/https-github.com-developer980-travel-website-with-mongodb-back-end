@@ -27,6 +27,7 @@ const get_favourites = require("./favourites/get_favourites");
 const remove_fromFavourites = require("./favourites/remove_fromFavourites");
 const expedia = require("./posts/expedia");
 const booking = require("./posts/booking");
+const create_finalList = require("./posts/create_finalList");
 
 // const dbconfig = require("./dbconfig");
 app.use(cors())
@@ -252,138 +253,92 @@ app.post("/get_posts", (req, res) => {
 
     const promise1 = new Promise((resolve) => {
         booking(keyWord, checkIn, checkOut).then(result => resolve(result))
-        // axios.get(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
-        // .then((data) => {
-
-        //     const $ = cheerio.load(data.data)
-        //     !elements.length && $('.d20f4628d0').each(function (i, elem) {
-        //         let rating_stars = 0
-        //         //console.log("text " + $(this).text())
-        //         const url_text = $(this).find(".ef8295f3e6").find(".fcab3ed991").text();
-        //         const url_href = $(this).find(".ef8295f3e6").children("div").find("a").attr("href")
-        //         const description = $(this).find(".ef8295f3e6").children(".d8eab2cf7f").text()
-        //         const location = $(this).find(".ef8295f3e6").children("div").children(".a1fbd102d9").children("a").children("span").children(".f4bd0794db").text();
-        //         const price_text = $(this).find('.fd1924b122').find(".fbd1d3018c ").text()
-        //         const img = $(this).find(".c90a25d457").find("img").attr("src")
-        //         //console.log(pretty(img.attr("src")))
-        //         const price = price_text.split("lei")[0].split(".").join('')
-        //         console.log("price " + price_text.split("lei")[0].split(".").join('') + " " + price_text.split("lei")[0].split(".").join('') / 4.90)
-        //         let notes = ""
-                
-        //         if (description.includes("Proprietate Călătorii durabile")) {
-        //             notes = "Travel sustenabillity property"
-        //         }
-        
-        //         $(this).find(".b978843432").find(".fbb11b26f5").children("span").each(function (item) {
-        //             rating_stars++
-        //         })
-        //         console.log("rating_stars: " + rating_stars)
-        //         const converted_price = price / 4.90
-        //         if (url_text && price){
-        //             //description.length ?
-        //             elements.push({
-        //                 url_text,
-        //                 url_href:[url_href],
-        //                 rating_stars,
-        //                 notes,
-        //                 img,
-        //                 price:[{
-        //                     website:"booking.com",
-        //                     value:price.replace("€", "").trim()
-        //                 }],
-        //                 location: location.replace("Arată pe hartă", " ")
-        //             })
-        //         }
-        //     })
-        //     resolve(elements)
-        // })
-
     })
     
     Promise.all([promise, promise1]).then((values) => {
+        create_finalList(values).then(list => res.send(list))
+        // console.log("values: ")
+        // console.log(values[0])
+        // const final_result = []
 
-        console.log("values: ")
-        console.log(values[0])
-        const final_result = []
+        // const test_array1 = []
 
-        const test_array1 = []
+        // for (let i = 0; i < values[1].length; i++) {
+        //     for (let j = 0; j < values[1].length; j++) {
+        //         if (i != j)
+        //             if (values[1][i].url_text == values[1][j].url_text) {
+        //                 values[1].splice(j, j)
+        //             }
+        //     }
+        // }
+        // for (let i = 0; i < values[0].length; i++) {
+        //     for (let j = 0; j < values[0].length; j++) {
+        //         if (i != j)
+        //             if (values[0][i].name == values[0][j].name) {
+        //                 values[0].splice(j, j)
+        //             }
+        //     }
+        // }
 
-        for (let i = 0; i < values[1].length; i++) {
-            for (let j = 0; j < values[1].length; j++) {
-                if (i != j)
-                    if (values[1][i].url_text == values[1][j].url_text) {
-                        values[1].splice(j, j)
-                    }
-            }
-        }
-        for (let i = 0; i < values[0].length; i++) {
-            for (let j = 0; j < values[0].length; j++) {
-                if (i != j)
-                    if (values[0][i].name == values[0][j].name) {
-                        values[0].splice(j, j)
-                    }
-            }
-        }
+        // const test_array = []
+        // for (let i = 0; i < values[0].length; i++){
+        //     test_array.push(values[0][i].name)
+        // }
 
-        const test_array = []
-        for (let i = 0; i < values[0].length; i++){
-            test_array.push(values[0][i].name)
-        }
+        // for (let i = 0; i < values[1].length; i++){
+        //     test_array1.push(values[1][i].url_text)
+        // }
 
-        for (let i = 0; i < values[1].length; i++){
-            test_array1.push(values[1][i].url_text)
-        }
+        // for (let i = 0; i < values[1].length; i++) {
+        //     console.log(values[1][i].price)
+        //     for (let j = 0; j < values[0].length; j++){
+        //         //console.log(values[1][j].price)
+        //         if (values[1][i].url_text == values[0][j].name) {
+        //             const price1 = values[1][i].price
+        //             const price2 = values[0][j].price
 
-        for (let i = 0; i < values[1].length; i++) {
-            console.log(values[1][i].price)
-            for (let j = 0; j < values[0].length; j++){
-                //console.log(values[1][j].price)
-                if (values[1][i].url_text == values[0][j].name) {
-                    const price1 = values[1][i].price
-                    const price2 = values[0][j].price
+        //             price1.push({
+        //                 website:"expedia.com",
+        //                 value:price2.toFixed(2)
+        //             })
 
-                    price1.push({
-                        website:"expedia.com",
-                        value:price2.toFixed(2)
-                    })
-
-                    values[1][i].url_href.push(values[0][j].url[0])
-                }
-                else if (i == values[1].length - 1) {
+        //             values[1][i].url_href.push(values[0][j].url[0])
+        //         }
+        //         else if (i == values[1].length - 1) {
                    
-                    if (values[0][j].img) {
-                        let n_o_elems = 0
-                        for (let k = 0; k < final_result.length; k++){
-                            if (final_result[k].url_text == values[0][j].name)
-                            {
-                                n_o_elems++
-                            }
-                        }
+        //             if (values[0][j].img) {
+        //                 let n_o_elems = 0
+        //                 for (let k = 0; k < final_result.length; k++){
+        //                     if (final_result[k].url_text == values[0][j].name)
+        //                     {
+        //                         n_o_elems++
+        //                     }
+        //                 }
                         
-                        !n_o_elems && final_result.push({
-                            url_text: values[0][j].name,
-                            url_href: values[0][j].url,
-                            location: values[0][j].location,
-                            price: [{
-                                website: "expedia.com",
-                                value: values[0][j].price.toFixed(2)
-                            }],
-                            img: values[0][j].img
-                        })
-                    }
-                }
+        //                 !n_o_elems && final_result.push({
+        //                     url_text: values[0][j].name,
+        //                     url_href: values[0][j].url,
+        //                     location: values[0][j].location,
+        //                     price: [{
+        //                         website: "expedia.com",
+        //                         value: values[0][j].price.toFixed(2)
+        //                     }],
+        //                     img: values[0][j].img
+        //                 })
+        //             }
+        //         }
                 
-            }
-            values[1][i].price[0].value && final_result.push(values[1][i])
-        }
+        //     }
+        //     values[1][i].price[0].value && final_result.push(values[1][i])
+        // }
 
-        res.send(final_result)
+        // res.send(final_result)
     })
 })
 
-module.exports = function response(res, data) {
-    res.send(data)
-}
+// module.exports = function response(res, data) {
+//     res.send(data)
+// }
 // process.env.PORT &&
 app.listen(3001, () => {
     console.log("Server started :)")
