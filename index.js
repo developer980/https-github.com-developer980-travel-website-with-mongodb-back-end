@@ -7,13 +7,12 @@ const axios = require('axios');
 const cheerio  = require("cheerio");
 const pretty = require("pretty");
 const e = require("express");
-const src = require("./Search_User");
 const { resolve } = require("path");
 const nodemailer = require("nodemailer");
 const { cursorTo } = require("readline");
 const path = require("path")
-const Search_User = require("./Search_User")
-const verify_token = require("./verify_token")
+const Search_User = require("./user_auth/search_User")
+const verify_token = require("./user_auth/verify_token")
 
 // const db = require("./dbconfig")
 
@@ -54,17 +53,8 @@ mongoClient.connect(
         }
 
         db = cli.db(database)
-
-        // db.collection('posts').insertOne({
-        //     name:"Tudor",
-        //     age:20
-        // })
     },
 )
-
-// db.connect((err) => {
-//     err ? console.log("Connection failed: " + err) : console.log("Succesfully connected")
-// })
 
 const transport = nodemailer.createTransport({
     service: "hotmail",
@@ -146,12 +136,14 @@ app.post("/search_user", (req, res) => {
     
 })
 
+
 app.post("/delete_user", (req, res) => {
     const email = req.body.email;
 
     db.collection("users").deleteOne({ email: email })
     res.send("Account deleted")
 })
+
 
 app.post("/reset_email", (req, res) => {
     const email = req.body.email;
@@ -161,6 +153,7 @@ app.post("/reset_email", (req, res) => {
         .catch(error => console.log("Email error: " + error))
 })
 
+
 app.post("/verify_user", (req, res) => {
     const token = req.body.token
     console.log("token: " + token)
@@ -168,6 +161,7 @@ app.post("/verify_user", (req, res) => {
 
     verify_user(db, email, token).then(result => res.send(result))
 })
+
 
 app.post("/reset_password", (req, res) => {
     const password = req.body.password
@@ -257,89 +251,9 @@ app.post("/get_posts", (req, res) => {
     
     Promise.all([promise, promise1]).then((values) => {
         create_finalList(values).then(list => res.send(list))
-        // console.log("values: ")
-        // console.log(values[0])
-        // const final_result = []
-
-        // const test_array1 = []
-
-        // for (let i = 0; i < values[1].length; i++) {
-        //     for (let j = 0; j < values[1].length; j++) {
-        //         if (i != j)
-        //             if (values[1][i].url_text == values[1][j].url_text) {
-        //                 values[1].splice(j, j)
-        //             }
-        //     }
-        // }
-        // for (let i = 0; i < values[0].length; i++) {
-        //     for (let j = 0; j < values[0].length; j++) {
-        //         if (i != j)
-        //             if (values[0][i].name == values[0][j].name) {
-        //                 values[0].splice(j, j)
-        //             }
-        //     }
-        // }
-
-        // const test_array = []
-        // for (let i = 0; i < values[0].length; i++){
-        //     test_array.push(values[0][i].name)
-        // }
-
-        // for (let i = 0; i < values[1].length; i++){
-        //     test_array1.push(values[1][i].url_text)
-        // }
-
-        // for (let i = 0; i < values[1].length; i++) {
-        //     console.log(values[1][i].price)
-        //     for (let j = 0; j < values[0].length; j++){
-        //         //console.log(values[1][j].price)
-        //         if (values[1][i].url_text == values[0][j].name) {
-        //             const price1 = values[1][i].price
-        //             const price2 = values[0][j].price
-
-        //             price1.push({
-        //                 website:"expedia.com",
-        //                 value:price2.toFixed(2)
-        //             })
-
-        //             values[1][i].url_href.push(values[0][j].url[0])
-        //         }
-        //         else if (i == values[1].length - 1) {
-                   
-        //             if (values[0][j].img) {
-        //                 let n_o_elems = 0
-        //                 for (let k = 0; k < final_result.length; k++){
-        //                     if (final_result[k].url_text == values[0][j].name)
-        //                     {
-        //                         n_o_elems++
-        //                     }
-        //                 }
-                        
-        //                 !n_o_elems && final_result.push({
-        //                     url_text: values[0][j].name,
-        //                     url_href: values[0][j].url,
-        //                     location: values[0][j].location,
-        //                     price: [{
-        //                         website: "expedia.com",
-        //                         value: values[0][j].price.toFixed(2)
-        //                     }],
-        //                     img: values[0][j].img
-        //                 })
-        //             }
-        //         }
-                
-        //     }
-        //     values[1][i].price[0].value && final_result.push(values[1][i])
-        // }
-
-        // res.send(final_result)
     })
 })
 
-// module.exports = function response(res, data) {
-//     res.send(data)
-// }
-// process.env.PORT &&
 app.listen(3001, () => {
     console.log("Server started :)")
 })
