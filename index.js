@@ -155,7 +155,7 @@ app.post("/add_tofav", (req, res) => {
 
 app.post("/get_favourites", (req, res) => {
     const email = req.body.email
-    get_favourites(db, email).then(result => res.send(result))
+    db && get_favourites(db, email).then(result => res.send(result))
 })
 
 app.post("/remove_fromFav", (req, res) => {
