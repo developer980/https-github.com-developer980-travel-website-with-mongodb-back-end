@@ -55,6 +55,11 @@ const transport = nodemailer.createTransport({
     }
 })
 
+app.post("/wake_up", (req) => {
+    const message = req.body.message
+    console.log(message)
+})
+
 app.use(express.json())
 
 app.post("/post_user", (req, res) => {
