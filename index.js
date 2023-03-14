@@ -28,10 +28,6 @@ let elements = []
 // let elements1 = []
 let elements2 = []
 
-// console.log(process.env.EML)
-// console.log(process.env.PASS)
-// console.log("URI: " + process.env.MONGODB_URI)
-
 let db
 
 mongoClient.connect(
@@ -55,12 +51,13 @@ const transport = nodemailer.createTransport({
     }
 })
 
-app.post("/wake_up", (req) => {
+
+app.use(express.json())
+
+app.post("/wake_up", (req, res) => {
     const message = req.body.message
     console.log(message)
 })
-
-app.use(express.json())
 
 app.post("/post_user", (req, res) => {
     const email = req.body.email
