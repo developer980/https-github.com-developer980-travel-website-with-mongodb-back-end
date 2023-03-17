@@ -18,6 +18,7 @@ const expedia = require("./posts/expedia");
 const booking = require("./posts/booking");
 const create_finalList = require("./posts/create_finalList");
 const post_user = require("./user_auth/post_user");
+const generate_token = require("./user_auth/generate_token")
 
 // const dbconfig = require("./dbconfig");
 app.use(cors())
@@ -74,16 +75,60 @@ app.post("/verify_token", (req, res) => {
     const token = req.body.token
     const email = req.body.email
 
-    verify_token(db, token, email)
+    verify_token(db, token, email, "pending_users")
         .then(result => res.send(result))
         .catch(reject => console.log("Token rejected"))
+})
+
+app.post("/verify_userToken", (req, res) => {
+    const token = req.body.token
+    const email = req.body.email
+    const response = []
+
+    const result = db.collection(users).find({
+        email:email
+    })
+
+    result.forEach((result, err) => {
+        response.push(result)
+    }, () => {
+        response[0].token == token && res.send("succes")
+    })
+})
+
+app.post("/confirm_user", (req, res) => {
+    const email = req.body.email
+    const token = generate_token(db, email)
+    const collection = "users"
+    const result =  []
+
+    const response = db.collection("users").find({
+        email:email
+    })
+
+    response.forEach(data => {
+        result.push({
+            email: data.email,
+            username: data.username,
+            password: data.password,
+            token:data.token
+        })
+    }, () => {
+        const data = result [0]
+        if (token == data.token) {
+            res.send({
+                email: data.email,
+                username: data.username,
+            })
+        }
+    })
 })
 
 app.post("/search_user", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    Search_User(email, password, db)
+    Search_User(email, transport, password, db)
         .then(result => res.send(result))
         .catch(error => res.send(error))
     
@@ -101,7 +146,9 @@ app.post("/delete_user", (req, res) => {
 app.post("/reset_email", (req, res) => {
     const email = req.body.email;
 
-    send_email(db, email, transport)
+    const token = generate_token(db, email)
+
+    send_email(db, email, transport, "Password reset", "Reset your password by accesing this", `https://travel-website-with-mongodb-front-end-bszn.vercel.app/resetPasswordfor_${token}`)
         .then(result => res.send(result))
         .catch(error => console.log("Email error: " + error))
 })

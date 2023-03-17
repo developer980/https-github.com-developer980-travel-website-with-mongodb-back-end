@@ -1,9 +1,9 @@
-module.exports = function verify_token(db, token, email) {
+module.exports = function verify_token(db, token, email, collection) {
     return new Promise((resolve, reject) => {
         //console.log(token)
         const response = []
         console.log("verifying...")
-        const result = db.collection("pending_users").find({
+        const result = db.collection(collection).find({
             email:email
         })
     
