@@ -111,7 +111,7 @@ app.post("/confirm_user", (req, res) => {
             email: data.email,
             username: data.username,
             password: data.password,
-            token:data.token
+            token:data.pass_token
         })
     }, () => {
         const data = result[0]
