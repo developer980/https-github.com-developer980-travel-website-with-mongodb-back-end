@@ -114,7 +114,8 @@ app.post("/confirm_user", (req, res) => {
             token:data.token
         })
     }, () => {
-        const data = result [0]
+        const data = result[0]
+        console.log(token + " = " + data.token)
         if (token == data.token) {
             res.send({
                 email: data.email,
