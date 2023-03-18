@@ -98,7 +98,7 @@ app.post("/verify_userToken", (req, res) => {
 
 app.post("/confirm_user", (req, res) => {
     const email = req.body.email
-    const token = generate_token(db, email)
+    const token = req.body.token
     const collection = "users"
     const result =  []
 
