@@ -19,7 +19,7 @@ module.exports = function Search_User(email, transport, password, db) {
                         if (succes) {
                             const token = generate_token(db, email)
             
-                            send_email(db, result[0].email, transport, "User confirmation",
+                            send_email(db, user.email, transport, "User confirmation",
                                 "Please confirm your user by accessing this ",
                                 `https://travel-website-with-mongodb-front-end-bszn.vercel.app/verify_${token}`)
                                 .then(result => resolve("Email sent"))
