@@ -103,10 +103,7 @@ app.post("/confirm_user", (req, res) => {
     const result = []
     
     console.log("email: " + email)
-
-    // const response = db.collection("users").find({
-    //     email:email
-    // })
+    
     db.collection("users").findOne({
         email:email
     }, (err, user) => {
@@ -115,23 +112,6 @@ app.post("/confirm_user", (req, res) => {
         if (token == user.pass_token)
             user && res.send(user)
     })
-    // response.forEach(data => {
-    //     result.push({
-    //         email: data.email,
-    //         username: data.username,
-    //         password: data.password,
-    //         token:data.pass_token
-    //     })
-    // }, () => {
-    //     const data = result[0]
-    //     console.log(token + " = " + data.token)
-    //     if (token == data.token) {
-    //         res.send({
-    //             email: data.email,
-    //             username: data.username,
-    //         })
-    //     }
-//    })
 })
 
 app.post("/search_user", (req, res) => {
