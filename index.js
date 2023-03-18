@@ -100,7 +100,9 @@ app.post("/confirm_user", (req, res) => {
     const email = req.body.email
     const token = req.body.token
     const collection = "users"
-    const result =  []
+    const result = []
+    
+    console.log("email: " + email)
 
     const response = db.collection("users").find({
         email:email
