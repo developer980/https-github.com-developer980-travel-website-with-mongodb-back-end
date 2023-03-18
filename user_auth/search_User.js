@@ -12,7 +12,7 @@ module.exports = function Search_User(email, transport, password, db) {
             }, (err, user) => {
                 if (err) throw err
                 
-                if (user.email && password) {
+                if (user && password) {
                     bcrypt.compare(password, user.password, (err, succes) => {
                         console.log("password matches")
                                 
