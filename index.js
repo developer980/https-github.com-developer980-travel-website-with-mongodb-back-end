@@ -120,7 +120,7 @@ app.post("/search_user", (req, res) => {
 
     Search_User(email, transport, password, db)
         .then(result => res.send(result))
-        .catch(error => console.log(error))
+        .catch(error => res.send(error))
     
 })
 
