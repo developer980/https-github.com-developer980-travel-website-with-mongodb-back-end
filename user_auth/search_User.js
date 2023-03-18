@@ -29,6 +29,8 @@ module.exports = function Search_User(email, transport, password, db) {
                         }
                     })
                 }
+
+                else reject("error")
             })
         } catch (e) {
             // res.status(500).json({error:e.message})
