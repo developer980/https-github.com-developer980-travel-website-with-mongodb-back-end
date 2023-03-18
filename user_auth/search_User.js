@@ -25,7 +25,8 @@ module.exports = function Search_User(email, transport, password, db) {
                                 .then(result => resolve("Email sent"))
                         }
                         else {
-                            err && reject("error")
+                            err && console.log(err)
+                            reject("error")
                         }
                     })
                 }
