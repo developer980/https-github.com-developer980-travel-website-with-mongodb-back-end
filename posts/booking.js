@@ -13,8 +13,8 @@ module.exports = function booking(keyWord, checkIn, checkOut) {
             !elements.length && $('.d20f4628d0').each(function (i, elem) {
                 let rating_stars = 0
                 //console.log("text " + $(this).text())
-                const url_text = $(this).find(".ef8295f3e6").find(".fcab3ed991").text();
-                const url_href = $(this).find(".ef8295f3e6").children("div").find("a").attr("href")
+                const url_text = $(this).find("h3").find(".fcab3ed991").text();
+                const url_href = $(this).find("h3").children("div").find("a").attr("href")
                 const description = $(this).find(".ef8295f3e6").children(".d8eab2cf7f").text()
                 const location = $(this).find(".ef8295f3e6").children("div").children(".a1fbd102d9").children("a").children("span").children(".f4bd0794db").text();
                 const price_text = $(this).find('.fd1924b122').find(".fbd1d3018c ").text()
