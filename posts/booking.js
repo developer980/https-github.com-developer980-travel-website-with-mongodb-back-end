@@ -23,6 +23,9 @@ module.exports = function booking(keyWord, checkIn, checkOut) {
                 const price = price_text.split("lei")[0].split(".").join('')
                 console.log("price " + price_text.split("lei")[0].split(".").join('') + " " + price_text.split("lei")[0].split(".").join('') / 4.90)
                 let notes = ""
+
+                console.log("url_href:")
+                console.log(url_href)
                 
                 if (description.includes("Proprietate Călătorii durabile")) {
                     notes = "Travel sustenabillity property"
