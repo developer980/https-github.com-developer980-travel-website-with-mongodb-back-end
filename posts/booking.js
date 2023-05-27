@@ -33,20 +33,24 @@ module.exports = function booking(keyWord, checkIn, checkOut) {
                 })
                 console.log("rating_stars: " + rating_stars)
                 const converted_price = price / 4.90
+                const new_element = {
+                    url_text,
+                    url_href:[url_href],
+                    rating_stars,
+                    notes,
+                    img,
+                    price:[{
+                        website:"booking.com",
+                        value:price.replace("€", "").trim()
+                    }],
+                    location: location.replace("Arată pe hartă", " ")
+                }
+
+                console.log(new_element)
+
                 if (url_text && price){
                     //description.length ?
-                    elements.push({
-                        url_text,
-                        url_href:[url_href],
-                        rating_stars,
-                        notes,
-                        img,
-                        price:[{
-                            website:"booking.com",
-                            value:price.replace("€", "").trim()
-                        }],
-                        location: location.replace("Arată pe hartă", " ")
-                    })
+                    elements.push(new_element)
                 }
             })
             resolve(elements)

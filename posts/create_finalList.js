@@ -72,6 +72,7 @@ module.exports = function create_finalList(values) {
                 }
                 
             }
+            
             values[1][i].price[0].value && final_result.push(values[1][i])
         }
         

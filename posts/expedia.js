@@ -32,16 +32,17 @@ module.exports = function expedia(keyWord, checkIn, checkOut) {
                     img = $(this).find("img").attr("src")
                 })
 
-                elements1.push({
+                const new_element = {
                     name: name.text(),
                     price: price.text().split(" ")[0].substring(1).replace(",", "") / 1.09,
                     location:location.text(),
                     img,
                     url:[url]
-                })
+                }
+                elements1.push(new_element)
             })
             //console.log("l2 " + elements1.length)
-            console.log(elements1)
+            // console.log(elements1)
             resolve(elements1)
         })
     })
