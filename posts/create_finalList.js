@@ -77,7 +77,7 @@ module.exports = function create_finalList(values) {
         }
         
         console.log("final_result")
-        console.log(final_result)
+        // console.log(final_result)
         resolve(final_result)
     })
 }

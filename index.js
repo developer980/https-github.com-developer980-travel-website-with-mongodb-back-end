@@ -31,18 +31,18 @@ let elements2 = []
 
 let db
 
-mongoClient.connect(
-    connectionURl,
-    {useNewUrlParser:true},
-    (err, cli) => {
-        if(err) {
-            console.log("Unable to connect to the database: " + err)
-            return
-        }
+// mongoClient.connect(
+//     connectionURl,
+//     {useNewUrlParser:true},
+//     (err, cli) => {
+//         if(err) {
+//             console.log("Unable to connect to the database: " + err)
+//             return
+//         }
 
-        db = cli.db(database)
-    },
-)
+//         db = cli.db(database)
+//     },
+// )
 
 const transport = nodemailer.createTransport({
     service: "hotmail",
@@ -206,6 +206,7 @@ app.post("/remove_fromFav", (req, res) => {
 
 app.post("/get_posts", (req, res) => {
     let keyWord = req.body.keyWord
+    console.log("searching")
     const checkIn = {
         day:req.body.parameters.checkIn.day,
         month:req.body.parameters.checkIn.month,
