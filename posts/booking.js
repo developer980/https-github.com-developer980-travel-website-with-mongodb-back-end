@@ -11,6 +11,7 @@ module.exports = function booking(keyWord, checkIn, checkOut) {
             .then((data) => {
             
                 
+                
                 console.log("collecting data")
                 console.log(data)
                 const $ = cheerio.load(data.data)
