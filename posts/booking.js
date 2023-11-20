@@ -22,7 +22,7 @@ module.exports = function booking(keyWord, checkIn, checkOut) {
                     let rating_stars = 0
                     //console.log("text " + $(this).text())
 
-                    console.log($(this).find("div"));
+                    console.log($(this).find("h3").text());
                     const url_text = $(this).find("h3").find(".f6431b446c").text();
                     const url_href = $(this).find("h3").find("a").attr("href")
                     // console.log(pretty(url_text))
