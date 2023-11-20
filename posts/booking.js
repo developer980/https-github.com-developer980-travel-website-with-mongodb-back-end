@@ -9,16 +9,20 @@ module.exports = function booking(keyWord, checkIn, checkOut) {
     return new Promise((resolve) => {
         axios.get(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
             .then((data) => {
-            
+        
             
 
-                console.log("collecting data")
-                console.log(data)
+                // console.log("collecting data")
+                // console.log(data)
                 const $ = cheerio.load(data.data)
+
+                console.log($.html())
+                console.log("divs")
                 !elements.length && $('.c82435a4b8').each(function (i, elem) {
                     let rating_stars = 0
                     //console.log("text " + $(this).text())
-                    
+
+                    console.log($(this).find("div"));
                     const url_text = $(this).find("h3").find(".f6431b446c").text();
                     const url_href = $(this).find("h3").find("a").attr("href")
                     // console.log(pretty(url_text))
