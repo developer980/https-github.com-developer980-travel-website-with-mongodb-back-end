@@ -7,6 +7,7 @@ module.exports = function Search_User(email, transport, password, db) {
         const result = []
         try {
             
+            console.log('searching for user of email: ' + email)
             db.collection('users').findOne({
                 email: email
             }, (err, user) => {
@@ -36,6 +37,7 @@ module.exports = function Search_User(email, transport, password, db) {
         } catch (e) {
             // res.status(500).json({error:e.message})
             reject('error')
+            console.log(e)
         }
     })
 }
