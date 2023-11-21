@@ -118,6 +118,8 @@ app.post("/search_user", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
+    console.log('searching for user of email: ' + email)
+    
     Search_User(email, transport, password, db)
         .then(result => res.send(result))
         .catch(error => res.send(error))
