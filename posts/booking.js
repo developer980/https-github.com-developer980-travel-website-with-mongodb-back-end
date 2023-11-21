@@ -1,6 +1,6 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
-const puppeteer = require("puppeteer")
+const puppeteer = require("puppeteer-core")
 const pretty = require("pretty")
 
 
@@ -9,8 +9,7 @@ module.exports = async function booking(keyWord, checkIn, checkOut) {
         
     let elements = []
     const browser = await puppeteer.launch({
-        headless:false,
-        args:['--no-sandbox', '--disable-setuid-sandbox']
+        headless:false
     })
 
     const page = await browser.newPage();
