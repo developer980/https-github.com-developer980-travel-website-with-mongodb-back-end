@@ -51,6 +51,8 @@ module.exports = async function booking(keyWord, checkIn, checkOut) {
     }))
 
     console.log(list)
+
+    await page.close()
     //console.log(title)
    // const list = await page.$$("div")
 
