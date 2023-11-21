@@ -5,6 +5,7 @@ const send_email = require("../email/send_email")
 module.exports = function Search_User(email, transport, password, db) {
     return new Promise((resolve, reject) => {
         const result = []
+        console.log('searching for user of email: ' + email)
         try {
             
             db.collection('users').findOne({

@@ -244,7 +244,7 @@ app.post("/get_posts", (req, res) => {
         create_finalList(values).then(list => res.send(list))
     })
 
-    // Promise.resolve(promise1).then((values) => create_finalList(values).then(list => res.send(list)))
+    //sd Promise.resolve(promise1).then((values) => create_finalList(values).then(list => res.send(list)))
 })
 
 app.listen(3001, () => {
