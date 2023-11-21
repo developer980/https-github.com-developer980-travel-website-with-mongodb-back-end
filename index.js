@@ -31,18 +31,18 @@ let elements2 = []
 
 let db
 
-// mongoClient.connect(
-//     connectionURl,
-//     {useNewUrlParser:true},
-//     (err, cli) => {
-//         if(err) {
-//             console.log("Unable to connect to the database: " + err)
-//             return
-//         }
+mongoClient.connect(
+    connectionURl,
+    {useNewUrlParser:true},
+    (err, cli) => {
+        if(err) {
+            console.log("Unable to connect to the database: " + err)
+            return
+        }
 
-//         db = cli.db(database)
-//     },
-// )
+        db = cli.db(database)
+    },
+)
 
 const transport = nodemailer.createTransport({
     service: "hotmail",
@@ -119,7 +119,7 @@ app.post("/search_user", (req, res) => {
     const password = req.body.password;
 
     console.log('searching for user of email: ' + email)
-    
+
     Search_User(email, transport, password, db)
         .then(result => res.send(result))
         .catch(error => res.send(error))
