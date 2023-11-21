@@ -240,11 +240,11 @@ app.post("/get_posts", (req, res) => {
         booking(keyWord, checkIn, checkOut).then(result => resolve(result))
     })
     
-    // Promise.all([promise, promise1]).then((values) => {
-    //     create_finalList(values).then(list => res.send(list))
-    // })
+    Promise.all([promise, promise1]).then((values) => {
+        create_finalList(values).then(list => res.send(list))
+    })
 
-    Promise.resolve(promise1).then((values) => console.log(values))
+    // Promise.resolve(promise1).then((values) => create_finalList(values).then(list => res.send(list)))
 })
 
 app.listen(3001, () => {
