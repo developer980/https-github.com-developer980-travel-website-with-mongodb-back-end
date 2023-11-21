@@ -23,7 +23,7 @@ module.exports = async function booking(keyWord, checkIn, checkOut) {
     })
 
     await page.waitForTimeout(10000)
-    await page.screenshot({ path: 'screenshot.png' });
+    // await page.screenshot({ path: 'screenshot.png' });
 
     // await page.waitForSelector('.c82435a4b8', {visible:true})
 
