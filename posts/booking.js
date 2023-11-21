@@ -10,6 +10,7 @@ module.exports = async function booking(keyWord, checkIn, checkOut) {
         
     let elements = []
     const browser = await puppeteer.launch({
+        headless:false,
         args:[
             '--no-sandbox', 
             '--disable-setuid-sandbox',
