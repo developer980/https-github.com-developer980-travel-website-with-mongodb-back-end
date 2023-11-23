@@ -2,12 +2,17 @@ const axios = require("axios")
 const cheerio = require("cheerio")
 const pretty = require("pretty")
 const puppeteer = require("puppeteer")
+require("dotenv").config()
 
 module.exports = async function booking(keyWord, checkIn, checkOut) {
         
     let elements = []
     const browser = await puppeteer.launch({
         headless:false,
+        executablePath:
+            process.env.NODE_ENV === "production"
+                ? process.env.PUPPETEER_EXECUTABLE_PATH
+                : puppeteer.executablePath()
         // args:{}
     })
 
