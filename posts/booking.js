@@ -8,6 +8,7 @@ module.exports = async function booking(keyWord, checkIn, checkOut) {
         
     let elements = []
     const browser = await puppeteer.launch({
+        ignoreDefaultArgs: ['--disable-extensions'],
         headless:false,
         executablePath:process.env.PUPPETEER_EXECUTABLE_PATH
             // process.env.NODE_ENV === "production"
