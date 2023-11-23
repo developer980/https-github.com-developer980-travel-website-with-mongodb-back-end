@@ -9,17 +9,19 @@ module.exports = async function booking(keyWord, checkIn, checkOut) {
     let elements = []
     const browser = await puppeteer.launch({
         headless:false,
-        executablePath:
-            process.env.NODE_ENV === "production"
-                ? process.env.PUPPETEER_EXECUTABLE_PATH
-                : puppeteer.executablePath()
-        // args:{}
+        executablePath:process.env.PUPPETEER_EXECUTABLE_PATH
+            // process.env.NODE_ENV === "production"
+            //     ? process.env.PUPPETEER_EXECUTABLE_PATH
+            //     : puppeteer.executablePath()
+        
     })
 
     const page = await browser.newPage()
 
-    await page.goto(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
+    await page.setUserAgent('page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")')
 
+    await page.goto(`https://www.booking.com/searchresults.ro.html?ss=${keyWord}${"&checkin=" + checkIn.year + "-" + checkIn.month + "-" + checkIn.day}${"&checkout=" + checkOut.year + "-" + checkOut.month + "-" + checkOut.day}`)
+    
     const list = await page.evaluate(() => Array.from(document.querySelectorAll(".c82435a4b8 h3 a .f6431b446c"), (item) => item.innerText))
 
     console.log(list)
