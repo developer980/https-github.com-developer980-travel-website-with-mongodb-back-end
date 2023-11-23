@@ -31,18 +31,18 @@ let elements2 = []
 
 let db
 
-mongoClient.connect(
-    connectionURl,
-    {useNewUrlParser:true},
-    (err, cli) => {
-        if(err) {
-            console.log("Unable to connect to the database: " + err)
-            return
-        }
+// mongoClient.connect(
+//     connectionURl,
+//     {useNewUrlParser:true},
+//     (err, cli) => {
+//         if(err) {
+//             console.log("Unable to connect to the database: " + err)
+//             return
+//         }
 
-        db = cli.db(database)
-    },
-)
+//         db = cli.db(database)
+//     },
+// )
 
 const transport = nodemailer.createTransport({
     service: "hotmail",
